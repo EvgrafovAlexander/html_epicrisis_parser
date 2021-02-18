@@ -1,31 +1,38 @@
-import re
 from scripts.constants import COLUMNS
+from .date_finder import get_date_between_sections
+from .text_finder import get_sex
 
 
-def get_sex(text: str) -> tuple:
-    reg_exp = r"[А-Я][а-я]+\s[А-Я][а-я]+\s[А-Я][а-я]+"
-    found = re.findall(reg_exp, text)
-    if len(found):
-        full_name = found[0].split()
-        second_name, first_name, middle_name = full_name
-        if middle_name[-3:] == 'вна':
-            sex = 'Женский'
-        elif middle_name[-3:] == 'вич':
-            sex = 'Мужской'
-        else:
-            sex = 'Неизвестно'
-        return (second_name, first_name, middle_name, sex)
-    else:
-        return ('unknown', 'unknown', 'unknown', 'unknown')
-
-
-def text_parser(data: str) -> dict:
+def text_parser(text: str) -> dict:
     patient_data = {col: None for col in COLUMNS}
 
-    second_name, first_name, middle_name, sex = get_sex(data)
+    # break into lines and remove leading and trailing space on each
+    lines = (line.strip() for line in text.splitlines())
+    # break multi-headlines into a line each
+    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    # drop blank lines
+    text = '\n'.join(chunk for chunk in chunks if chunk)
+
+    second_name, first_name, middle_name, sex, text = get_sex(text)
     patient_data['second_name'] = second_name
     patient_data['first_name'] = first_name
     patient_data['middle_name'] = middle_name
     patient_data['sex'] = sex
+
+    text = text.lower()
+
+    dob, text = get_date_between_sections(r'дата рождения:', r'находился', text)
+    patient_data['dob'] = dob
+
+    treatment_start, text = get_date_between_sections(r'находился', r'по', text)
+    patient_data['treatment_start'] = treatment_start
+
+    treatment_stop, text = get_date_between_sections(r'по', r'адрес', text)
+    patient_data['treatment_stop'] = treatment_stop
+
+    print(text)
+
+
+
 
     return patient_data
