@@ -13,11 +13,8 @@ def text_parser(text: str) -> dict:
     # drop blank lines
     text = '\n'.join(chunk for chunk in chunks if chunk)
 
-    second_name, first_name, middle_name, sex, text = get_sex(text)
-    patient_data['second_name'] = second_name
-    patient_data['first_name'] = first_name
-    patient_data['middle_name'] = middle_name
-    patient_data['sex'] = sex
+    name_dict, text = get_sex(text)
+    patient_data.update(name_dict)
 
     text = text.lower()
 
@@ -30,9 +27,7 @@ def text_parser(text: str) -> dict:
     treatment_stop, text = get_date_between_sections(r'по', r'адрес', text)
     patient_data['treatment_stop'] = treatment_stop
 
-    diag = get_diagnosis(text)
-
-
-
+    diag_dict, text = get_diagnosis(text)
+    patient_data.update(diag_dict)
 
     return patient_data
