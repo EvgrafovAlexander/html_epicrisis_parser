@@ -1,6 +1,6 @@
 from scripts.constants import COLUMNS
 from .date_finder import get_date_between_sections
-from .text_finder import get_sex
+from .text_finder import get_sex, get_diagnosis
 
 
 def text_parser(text: str) -> dict:
@@ -30,7 +30,7 @@ def text_parser(text: str) -> dict:
     treatment_stop, text = get_date_between_sections(r'по', r'адрес', text)
     patient_data['treatment_stop'] = treatment_stop
 
-    print(text)
+    diag = get_diagnosis(text)
 
 
 
