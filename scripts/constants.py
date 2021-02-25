@@ -1,6 +1,9 @@
+patient_id = 0
+
 COLUMNS = ['id', 'first_name', 'second_name', 'middle_name', 'sex',
            'dob', 'treatment_start', 'treatment_stop',
-           'base', 'identified', 'form', 'complication', 'respiratory_distress']
+           'base', 'identified', 'form', 'complication', 'respiratory_distress',
+           'is_concomitant_disease', 'conc_dieases_text']
 
 DIAG_DICT = {
              # основной диагноз
@@ -32,6 +35,18 @@ F_BASE_DIAG = [('основной', 'осложнение'),
 
 F_COMP_DIAG = [('осложнение', 'сопутствующий'),
                ('осложнение', 'жалобы'),
-               ('осл', 'жалобы')]
+               ('осл', 'жалобы'),
+               ('осложнение', 'анамнез')]
+
+F_CONC_DIAG = [('сопутствующий:', 'жалобы'),
+               ('сопутствующие:', 'жалобы'),
+               ('сопутствующий', 'жалобы'),
+               ('сопутствующие', 'жалобы'),
+               ('сопутствующее:', 'анамнез'),
+               ('сопутствующий:', 'анамнез')]
+
+F_COMPLAINTS = [('жалобы', 'анамнез')]
+
+END_DIAG = ['жалобы', 'анамнез']
 
 PATH = './Epicrises/'

@@ -11,6 +11,7 @@ def add_patient(df_data: dict, patient_data: dict):
 
 
 def main():
+    id = 1
     data_for_df = {col: [] for col in COLUMNS}
     file_names = os.listdir(path=PATH)
     # TODO - Убрать следующую строку
@@ -18,8 +19,9 @@ def main():
     for name in file_names:
         with codecs.open(PATH + name, "r", "utf-8") as html:
             text = BeautifulSoup(html, features="html.parser").get_text()
-            patient_data = text_parser(text)
+            patient_data = text_parser(text, id)
             add_patient(data_for_df, patient_data)
+            id += 1
 
     df = pd.DataFrame(data=data_for_df)
     df.to_excel("output.xlsx", index=False)

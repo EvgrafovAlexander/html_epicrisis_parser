@@ -1,10 +1,11 @@
 from scripts.constants import COLUMNS
 from .date_finder import get_date_between_sections
-from .text_finder import get_sex, get_diagnosis
+from .segment_finder import get_sex, get_diagnosis, get_complaints
 
 
-def text_parser(text: str) -> dict:
+def text_parser(text: str, patient_id: int) -> dict:
     patient_data = {col: None for col in COLUMNS}
+    patient_data['id'] = patient_id
 
     # break into lines and remove leading and trailing space on each
     lines = (line.strip() for line in text.splitlines())
@@ -29,5 +30,7 @@ def text_parser(text: str) -> dict:
 
     diag_dict, text = get_diagnosis(text)
     patient_data.update(diag_dict)
+
+    t = get_complaints(text)
 
     return patient_data
