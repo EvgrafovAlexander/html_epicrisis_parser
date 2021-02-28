@@ -1,10 +1,10 @@
 import re
 
 from .classifier import classify_by_dict
-from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIAG, F_COMPLAINTS
+from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIAG, F_COMPLAINTS, COMPLAINTS_DICT
 from .number_finder import get_nums_from_text
 from .text_finder import get_end_point, get_end_few_point, \
-    get_text_between_sections, get_text_between_few_sections
+    get_text_between_sections, get_text_between_few_sections, is_words_in_text
 
 
 # ---------- ФИО и пол ----------
@@ -90,8 +90,16 @@ def find_resp_distress(text: str) -> int or None:
 
 # ---------- Жалобы ----------
 def get_complaints(text: str) -> tuple:
-    compl_dict = {'base': None}
+    compl_dict = {'is_weakness': None,
+                  'is_aches': None,
+                  'is_dyspnea_at_rest': None,
+                  'is_dyspnea_at_stress': None}
     compl_text = get_text_between_few_sections(F_COMPLAINTS, text)
+    if compl_text is not None:
+        compl_dict['is_weakness'] = is_words_in_text(COMPLAINTS_DICT['is_weakness'], compl_text)
+        compl_dict['is_aches'] = is_words_in_text(COMPLAINTS_DICT['is_aches'], compl_text)
+        compl_dict['is_dyspnea_at_rest'] = is_words_in_text(COMPLAINTS_DICT['is_dyspnea_at_rest'], compl_text)
+        compl_dict['is_dyspnea_at_stress'] = is_words_in_text(COMPLAINTS_DICT['is_dyspnea_at_stress'], compl_text)
     #print(compl_text)
     #print('КОНЕЦ')
     return (compl_dict, text)

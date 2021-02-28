@@ -30,3 +30,10 @@ def get_text_between_few_sections(sections: list, text: str) -> str or None:
         if found:
             return found
     return None
+
+
+def is_words_in_text(words: list, text: str):
+    for word in words:
+        if word in text:
+            return True
+    return False

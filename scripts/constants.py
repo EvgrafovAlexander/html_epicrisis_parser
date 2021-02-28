@@ -3,7 +3,8 @@ patient_id = 0
 COLUMNS = ['id', 'first_name', 'second_name', 'middle_name', 'sex',
            'dob', 'treatment_start', 'treatment_stop',
            'base', 'identified', 'form', 'complication', 'respiratory_distress',
-           'is_concomitant_disease', 'conc_dieases_text']
+           'is_concomitant_disease', 'conc_dieases_text',
+           'is_weakness', 'is_aches', 'is_dyspnea_at_rest', 'is_dyspnea_at_stress']
 
 DIAG_DICT = {
              # основной диагноз
@@ -27,6 +28,22 @@ DIAG_DICT = {
                  {'Внебольничная двусторонняя полисегментарная пневмония':
                             ['внебольничная двусторонняя полисегментарная пневмония']}
              }
+
+
+COMPLAINTS_DICT = {
+            # слабость
+            'is_weakness':
+                ['слабость', 'слабос'],
+            # ломота
+            'is_aches':
+                ['ломоту в теле', 'ломоту', 'ломота', 'ломот'],
+            # одышка в покое
+            'is_dyspnea_at_rest':
+                ['одышку в покое', 'покое'],
+            # одышка при физической нагрузке
+            'is_dyspnea_at_stress':
+                ['одышку при физической нагрузке', 'физическ']
+            }
 
 
 F_BASE_DIAG = [('основной', 'осложнение'),

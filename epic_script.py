@@ -1,4 +1,4 @@
-import codecs, os
+import codecs, os, logging
 import pandas as pd
 from bs4 import BeautifulSoup
 from scripts.constants import COLUMNS, PATH
@@ -11,6 +11,11 @@ def add_patient(df_data: dict, patient_data: dict):
 
 
 def main():
+    logging.basicConfig(filename='logs.log', level=logging.INFO)
+    logging.info('Запуск скрипта')
+
+
+
     id = 1
     data_for_df = {col: [] for col in COLUMNS}
     file_names = os.listdir(path=PATH)
@@ -22,10 +27,13 @@ def main():
             patient_data = text_parser(text, id)
             add_patient(data_for_df, patient_data)
             id += 1
+        logging.info('Документ ' + str(name) + ' обработан')
 
     df = pd.DataFrame(data=data_for_df)
-    df.to_excel("output.xlsx", index=False)
+    df.replace({True: '+', False: '-'}, inplace=True)
 
+    df.to_excel("output.xlsx", index=False)
+    logging.info('Конец скрипта')
 
 
 '''
