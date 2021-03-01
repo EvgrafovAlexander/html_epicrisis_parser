@@ -35,6 +35,8 @@ def main():
 
 
 '''
+re.findall(r'\bB\w+', text, flags=re.IGNORECASE)  
+r"[А-Я][а-я]+\s[А-Я][а-я]+\s[А-Я][а-я]+"
     d = {'col1': [1, 2], 'col2': [3, 4]}
     df = pd.DataFrame(data=d)
     df.to_excel("output.xlsx")

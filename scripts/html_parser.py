@@ -1,5 +1,5 @@
 from scripts.constants import COLUMNS
-from .date_finder import get_date_between_sections, get_date_between_few_sections
+from .date_finder import get_date_between_few_sections
 from .segment_finder import get_sex, get_diagnosis, get_complaints
 from .constants import F_DATES
 

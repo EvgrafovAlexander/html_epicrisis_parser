@@ -1,10 +1,11 @@
 import re
 
 from .classifier import classify_by_dict
-from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIAG, F_COMPLAINTS, COMPLAINTS_DICT
+from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIAG, F_COMPLAINTS, COMPLAINTS_DICT, \
+    F_TEXT
 from .number_finder import get_nums_from_text
 from .text_finder import get_end_point, get_end_few_point, \
-    get_text_between_sections, get_text_between_few_sections, is_words_in_text
+    get_text_between_few_sections, is_words_in_text
 
 
 # ---------- ФИО и пол ----------
@@ -13,11 +14,9 @@ def get_sex(text: str) -> tuple:
                  'second_name': None,
                  'middle_name': None,
                  'sex': None}
-    reg_exp = r"[А-Я][а-я]+\s[А-Я][а-я]+\s[А-Я][а-я]+"
-
-    found = re.findall(reg_exp, text)
+    found = find_names(text)
     if len(found) > 0:
-        full_name = found[0].split()
+        full_name = found[0].title().split()
         second_name, first_name, middle_name = full_name
 
         if middle_name[-3:] == 'вна':
@@ -37,6 +36,19 @@ def get_sex(text: str) -> tuple:
         return (name_dict, text)
 
 
+def find_names(text: str) -> str or None:
+    reg_list = [r"[А-Яа-я]+\s[А-Яа-я]+\s[А-Яа-я]+вич",
+                r"[А-Яа-я]+\s[А-Яа-я]+\s[А-Яа-я]+вна",
+                r"[А-Яа-я]+\s[А-Яа-я]+\s[А-Яа-я]+ВИЧ",
+                r"[А-Яа-я]+\s[А-Яа-я]+\s[А-Яа-я]+ВНА"]
+    name_text = text[:700]
+    for reg_exp in reg_list:
+        found = re.findall(reg_exp, name_text)
+        if found:
+            return found
+    return None
+
+
 # ---------- Диагноз ----------
 def get_diagnosis(text: str) -> tuple:
     diag_dict = {'base': None,
@@ -46,7 +58,7 @@ def get_diagnosis(text: str) -> tuple:
                  'respiratory_distress': None,
                  'is_concomitant_disease': '-',
                  'conc_dieases_text': None}
-    diag_text = get_text_between_sections('с диагнозом', 'жалобы пациента', text)
+    diag_text = get_text_between_few_sections(F_TEXT['diagnosis'], text)
     diag_dict = find_diagnosis(diag_text, diag_dict, 'base')
     diag_dict = find_diagnosis(diag_text, diag_dict, 'comp')
     diag_dict = find_diagnosis(diag_text, diag_dict, 'conc')
