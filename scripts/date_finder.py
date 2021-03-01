@@ -3,7 +3,7 @@ from datetime import datetime
 from .text_finder import get_end_point
 
 
-def get_date_between_sections(beg_sec: str, end_sec: str, text: str) -> tuple:
+def get_date_between_sections(beg_sec: str, end_sec: str, text: str) -> datetime or None:
     # ищем позиции тегов в тексте
     beg_point = re.search(beg_sec, text)
     end_point = re.search(end_sec, text)
@@ -37,9 +37,13 @@ def get_date_between_sections(beg_sec: str, end_sec: str, text: str) -> tuple:
                 year = '19' + matches[0]
             else:
                 year = '20' + matches[0]
-            return (datetime.strptime('01.01.' + year, '%d.%m.%Y').date(),
-                    text[get_end_point(text, matches[0]):])
+            return datetime.strptime('01.01.' + year, '%d.%m.%Y').date()
+    return None
 
-        return (datetime.strptime("01.01.1800", '%d.%m.%Y').date(),
-                text[get_end_point(text, matches[0]):])
-    return (datetime.strptime("01.01.1800", '%d.%m.%Y').date(), text)
+
+def get_date_between_few_sections(sections: list, text: str) -> datetime or None:
+    for section in sections:
+        found = get_date_between_sections(section[0], section[1], text)
+        if found:
+            return found[0]
+    return None

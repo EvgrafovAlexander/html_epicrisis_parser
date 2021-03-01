@@ -1,6 +1,7 @@
 from scripts.constants import COLUMNS
-from .date_finder import get_date_between_sections
+from .date_finder import get_date_between_sections, get_date_between_few_sections
 from .segment_finder import get_sex, get_diagnosis, get_complaints
+from .constants import F_DATES
 
 
 def text_parser(text: str, patient_id: int) -> dict:
@@ -18,13 +19,13 @@ def text_parser(text: str, patient_id: int) -> dict:
 
     text = text.lower()
 
-    dob, text = get_date_between_sections(r'дата рождения:', r'находился', text)
+    dob = get_date_between_few_sections(F_DATES['dob'], text)
     patient_data['dob'] = dob
 
-    treatment_start, text = get_date_between_sections(r'находился', r'по', text)
+    treatment_start = get_date_between_few_sections(F_DATES['treatment_start'], text)
     patient_data['treatment_start'] = treatment_start
 
-    treatment_stop, text = get_date_between_sections(r'по', r'адрес', text)
+    treatment_stop = get_date_between_few_sections(F_DATES['treatment_stop'], text)
     patient_data['treatment_stop'] = treatment_stop
 
     diag_dict, text = get_diagnosis(text)

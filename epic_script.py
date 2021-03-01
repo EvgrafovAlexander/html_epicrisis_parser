@@ -14,8 +14,6 @@ def main():
     logging.basicConfig(filename='logs.log', level=logging.INFO)
     logging.info('Запуск скрипта')
 
-
-
     id = 1
     data_for_df = {col: [] for col in COLUMNS}
     file_names = os.listdir(path=PATH)
