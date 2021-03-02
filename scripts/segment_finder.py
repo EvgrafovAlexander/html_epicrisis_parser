@@ -1,8 +1,8 @@
-import re
+import re, logging
 
 from .classifier import classify_by_dict
 from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIAG, F_COMPLAINTS, COMPLAINTS_DICT, \
-    F_TEXT
+    F_TEXT, END_COMP, F_ANAMNESIS, END_ANAM
 from .number_finder import get_nums_from_text
 from .text_finder import get_end_point, get_end_few_point, \
     get_text_between_few_sections, is_words_in_text
@@ -33,6 +33,7 @@ def get_sex(text: str) -> tuple:
 
         return (name_dict, text[get_end_point(text, middle_name):])
     else:
+        logging.info('Не найден фрагмент: ФИО и пол')
         return (name_dict, text)
 
 
@@ -59,9 +60,12 @@ def get_diagnosis(text: str) -> tuple:
                  'is_concomitant_disease': '-',
                  'conc_dieases_text': None}
     diag_text = get_text_between_few_sections(F_TEXT['diagnosis'], text)
-    diag_dict = find_diagnosis(diag_text, diag_dict, 'base')
-    diag_dict = find_diagnosis(diag_text, diag_dict, 'comp')
-    diag_dict = find_diagnosis(diag_text, diag_dict, 'conc')
+    if diag_text:
+        diag_dict = find_diagnosis(diag_text, diag_dict, 'base')
+        diag_dict = find_diagnosis(diag_text, diag_dict, 'comp')
+        diag_dict = find_diagnosis(diag_text, diag_dict, 'conc')
+    else:
+        logging.info('Не найден фрагмент: Диагноз')
     text = text[get_end_few_point(text, END_DIAG):]
     return (diag_dict, text)
 
@@ -112,6 +116,20 @@ def get_complaints(text: str) -> tuple:
         compl_dict['is_aches'] = is_words_in_text(COMPLAINTS_DICT['is_aches'], compl_text)
         compl_dict['is_dyspnea_at_rest'] = is_words_in_text(COMPLAINTS_DICT['is_dyspnea_at_rest'], compl_text)
         compl_dict['is_dyspnea_at_stress'] = is_words_in_text(COMPLAINTS_DICT['is_dyspnea_at_stress'], compl_text)
-    #print(compl_text)
-    #print('КОНЕЦ')
+    else:
+        logging.info('Не найден фрагмент: Жалобы')
+    text = text[get_end_few_point(text, END_COMP):]
     return (compl_dict, text)
+
+
+# ---------- Анамнез ----------
+def get_anamnesis(text: str) -> tuple:
+    anamn_dict = {}
+    anamn_text = get_text_between_few_sections(F_ANAMNESIS, text)
+    if anamn_text:
+        # TODO: Выполнить парсинг анамнеза
+        pass
+    else:
+        logging.info('Не найден фрагмент: Анамнез')
+    text = text[get_end_few_point(text, END_ANAM):]
+    return (anamn_dict, text)

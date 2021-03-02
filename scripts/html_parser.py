@@ -1,6 +1,6 @@
 from scripts.constants import COLUMNS
 from .date_finder import get_date_between_few_sections
-from .segment_finder import get_sex, get_diagnosis, get_complaints
+from .segment_finder import get_sex, get_diagnosis, get_complaints, get_anamnesis
 from .constants import F_DATES
 
 
@@ -8,11 +8,11 @@ def text_parser(text: str, patient_id: int) -> dict:
     patient_data = {col: None for col in COLUMNS}
     patient_data['id'] = patient_id
     # break into lines and remove leading and trailing space on each
-    lines = (line.strip() for line in text.splitlines())
+    #lines = (line.strip() for line in text.splitlines())
     # break multi-headlines into a line each
-    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+    #chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
     # drop blank lines
-    text = '\n'.join(chunk for chunk in chunks if chunk)
+    #text = '\n'.join(chunk for chunk in chunks if chunk)
 
     name_dict, text = get_sex(text)
     patient_data.update(name_dict)
@@ -33,5 +33,11 @@ def text_parser(text: str, patient_id: int) -> dict:
 
     comp_dict, text = get_complaints(text)
     patient_data.update(comp_dict)
+
+    anam_dict, text = get_anamnesis(text)
+    patient_data.update(anam_dict)
+
+    print(text)
+    print('КОНЕЦ')
 
     return patient_data

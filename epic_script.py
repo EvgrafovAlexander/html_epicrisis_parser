@@ -12,7 +12,7 @@ def add_patient(df_data: dict, patient_data: dict):
 
 def main():
     logging.basicConfig(filename='logs.log', level=logging.INFO)
-    logging.info('Запуск скрипта')
+    logging.info('Начало обработки')
 
     id = 1
     data_for_df = {col: [] for col in COLUMNS}
@@ -20,18 +20,19 @@ def main():
     # TODO - Убрать следующую строку
     #file_names = [file_names[0]]
     for name in file_names:
+        logging.info('Документ ' + str(name) + ' в обработке:')
         with codecs.open(PATH + name, "r", "utf-8") as html:
             text = BeautifulSoup(html, features="html.parser").get_text()
             patient_data = text_parser(text, id)
             add_patient(data_for_df, patient_data)
             id += 1
-        logging.info('Документ ' + str(name) + ' обработан')
+        logging.info('Документ ' + str(name) + ' обработан\n')
 
     df = pd.DataFrame(data=data_for_df)
     df.replace({True: '+', False: '-'}, inplace=True)
 
     df.to_excel("output.xlsx", index=False)
-    logging.info('Конец скрипта')
+    logging.info('Конец обработки')
 
 
 '''
