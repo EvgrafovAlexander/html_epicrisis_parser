@@ -1,6 +1,6 @@
 from scripts.constants import COLUMNS
 from .date_finder import get_date_between_few_sections
-from .segment_finder import get_sex, get_diagnosis, get_complaints, get_anamnesis
+from .segment_finder import get_sex, get_diagnosis, get_complaints, get_anamnesis, get_test_results
 from .constants import F_DATES
 
 
@@ -37,7 +37,6 @@ def text_parser(text: str, patient_id: int) -> dict:
     anam_dict, text = get_anamnesis(text)
     patient_data.update(anam_dict)
 
-    print(text)
-    print('КОНЕЦ')
+    test_dict, text = get_test_results(text)
 
     return patient_data

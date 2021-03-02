@@ -6,6 +6,7 @@ from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIA
 from .number_finder import get_nums_from_text
 from .text_finder import get_end_point, get_end_few_point, \
     get_text_between_few_sections, is_words_in_text
+from .table_finder import segment_tables
 
 
 # ---------- ФИО и пол ----------
@@ -133,3 +134,10 @@ def get_anamnesis(text: str) -> tuple:
         logging.info('Не найден фрагмент: Анамнез')
     text = text[get_end_few_point(text, END_ANAM):]
     return (anamn_dict, text)
+
+
+# ---------- Результаты исследований ----------
+def get_test_results(text: str) -> tuple:
+    table_segments = segment_tables(text)
+
+    return (1, 2)
