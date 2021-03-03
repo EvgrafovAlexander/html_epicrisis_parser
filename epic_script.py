@@ -1,6 +1,7 @@
 import codecs, os, logging
 import pandas as pd
 from bs4 import BeautifulSoup
+from datetime import datetime
 from scripts.constants import COLUMNS, PATH
 from scripts.html_parser import text_parser
 
@@ -11,6 +12,7 @@ def add_patient(df_data: dict, patient_data: dict):
 
 
 def main():
+    start_date = datetime.today()
     logging.basicConfig(filename='logs.log', level=logging.INFO)
     logging.info('Начало обработки')
 
@@ -31,8 +33,11 @@ def main():
     df = pd.DataFrame(data=data_for_df)
     df.replace({True: '+', False: '-'}, inplace=True)
 
-    df.to_excel("output.xlsx", index=False)
-    logging.info('Конец обработки')
+    df.to_excel("output.xlsx", sheet_name='Основная информация', index=False)
+
+    work_interval = (datetime.today() - start_date).microseconds
+    logging.info('Завершение обработки')
+    logging.info('Продолжительность обработки: %.2f с.', float(work_interval / 10**6))
 
 
 '''

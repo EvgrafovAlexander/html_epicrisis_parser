@@ -1,5 +1,3 @@
-patient_id = 0
-
 COLUMNS = ['id', 'first_name', 'second_name', 'middle_name', 'sex',
            'dob', 'treatment_start', 'treatment_stop',
            'base', 'identified', 'form', 'complication', 'respiratory_distress',
