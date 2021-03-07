@@ -38,3 +38,13 @@ COLUMN_TABLE = {'Коагулограмма Covid19': ['date', 'PV', 'MNO', 'D_d
                 'Биохимия Covid19': ['CRE', 'ALT', 'AST', 'LDG', 'UREA', 'fosph_act',
                                      'KFK', 'Albumin', 'TBil', 'SRB', 'K', 'Na', 'glykoza']
                 }
+
+
+TABLE_DICT = {'Коагулограмма':
+                {'дата': {'name': 'Дата', 'type': float, 'unit': ''},
+                'аптв': {'name': 'АПТВ', 'type': float, 'unit': '(сек.)'},
+                'мно': {'name': 'МНО', 'type': float, 'unit': ''},
+                'пв': {'name': 'ПВ', 'type': float, 'unit': '(сек.)'},
+                'пти': {'name': 'ПТИ', 'type': float, 'unit': '(%)'},
+                'фибриноген': {'name': 'Фибриноген', 'type': float, 'unit': '(г/л)'}}
+              }

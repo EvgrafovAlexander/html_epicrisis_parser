@@ -1,6 +1,8 @@
 import re, logging
+from datetime import datetime
 from typing import List
-from .table_constants import TABLE_FINDER_DICT
+from .table_constants import TABLE_FINDER_DICT, TABLE_DICT
+from .date_finder import get_date_between_sections
 
 
 def create_table_info(text: str) -> List[dict]:
@@ -49,8 +51,52 @@ def table_handler(text: str, table_info: dict) -> dict:
     name = table_info['name']
     table_text = text[table_info['start']:table_info['stop']]
     sep = table_text.split('\n')
-    print(sep)
-    print()
-    print()
+    if name == 'Коагулограмма':
+        #print(sep)
+        information_extractor(table_text, TABLE_DICT['Коагулограмма'])
+        #print()
+        #print()
     return {}
+
+
+def information_extractor(text: str, table_dict: dict):
+    data_list = []
+    data_dict = {key: None for key in table_dict.keys()}
+
+    fragments = text.split('\n')
+    columns = []
+    col_mode, fill_mode = True, False
+    cur_ind, max_ind, data_dict_cur = 0, 0, {}
+    add_allowed = True
+    for fragment in fragments:
+        if col_mode:
+            if fragment in table_dict:
+                if add_allowed:
+                    columns.append(fragment)
+                else:
+                    columns = []
+                    add_allowed = True
+                    columns.append(fragment)
+
+            date = re.search(r'\d\d.\d\d.\d\d\d\d', fragment)
+            if date:
+                date = datetime.strptime(date.string, '%d.%m.%Y')
+                data_dict_cur = data_dict.copy()
+                data_dict_cur['дата'] = date
+                cur_ind = 0
+                max_ind = len(columns)
+                col_mode = False
+                fill_mode = True
+                add_allowed = False
+                continue
+        if fill_mode:
+            if cur_ind < max_ind:
+                data_dict_cur[columns[cur_ind]] = fragment
+                cur_ind += 1
+            else:
+                data_list.append(data_dict_cur)
+                fill_mode = False
+                col_mode = True
+    return data_list
+
 
