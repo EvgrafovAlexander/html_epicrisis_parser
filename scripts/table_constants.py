@@ -41,10 +41,31 @@ COLUMN_TABLE = {'Коагулограмма Covid19': ['date', 'PV', 'MNO', 'D_d
 
 
 TABLE_DICT = {'Коагулограмма':
-                {'дата': {'name': 'Дата', 'type': float, 'unit': ''},
+                {
+                'дата': {'name': 'Дата', 'type': 'date', 'unit': ''},
                 'аптв': {'name': 'АПТВ', 'type': float, 'unit': '(сек.)'},
                 'мно': {'name': 'МНО', 'type': float, 'unit': ''},
                 'пв': {'name': 'ПВ', 'type': float, 'unit': '(сек.)'},
                 'пти': {'name': 'ПТИ', 'type': float, 'unit': '(%)'},
-                'фибриноген': {'name': 'Фибриноген', 'type': float, 'unit': '(г/л)'}}
+                'фибриноген': {'name': 'Фибриноген', 'type': float, 'unit': '(г/л)'}
+                },
+              'Общий анализ крови развернутый':
+                {
+                'дата': {'name': 'Дата', 'type': 'date', 'unit': ''},
+                'эритроциты': {'name': 'Эритроциты', 'type': float, 'unit': '(10^12)'},
+                'тромбоциты': {'name': 'Тромбоциты', 'type': float, 'unit': '(10^9)'},
+                'нейтрофилы': {'name': 'Нейтрофилы', 'type': float, 'unit': '(%)'},
+                'моноциты': {'name': 'Моноциты', 'type': float, 'unit': '(%)'},
+                'лимфоциты': {'name': 'Лимфоциты', 'type': float, 'unit': '(%)'},
+                'лейкоциты': {'name': 'Лейкоциты', 'type': float, 'unit': '(10^9)'},
+                'гемоглобин': {'name': 'Гемоглобин', 'type': float, 'unit': '(г/л)'},
+                'гематокрит': {'name': 'Гематокрит', 'type': float, 'unit': '(%)'},
+                'mcv': {'name': 'MCV', 'type': float, 'unit': '(фл)'},
+                'mch': {'name': 'MCH', 'type': float, 'unit': '(пг)'},
+                'mchc': {'name': 'MCHC', 'type': float, 'unit': '(г/л)'},
+                'mpv': {'name': 'MPV', 'type': float, 'unit': '(фл)'},
+                'эозинофилы': {'name': 'Эозинофилы', 'type': float, 'unit': '(%)'},
+                'базофилы': {'name': 'Базофилы', 'type': float, 'unit': '(%)'},
+                'rdw-sd': {'name': 'RDW-SD', 'type': float, 'unit': '(фл)'}
+                }
               }

@@ -51,9 +51,9 @@ def table_handler(text: str, table_info: dict) -> dict:
     name = table_info['name']
     table_text = text[table_info['start']:table_info['stop']]
     sep = table_text.split('\n')
-    if name == 'Коагулограмма':
+    if name == 'Общий анализ крови развернутый':
         #print(sep)
-        information_extractor(table_text, TABLE_DICT['Коагулограмма'])
+        information_extractor(table_text, TABLE_DICT['Общий анализ крови развернутый'])
         #print()
         #print()
     return {}
@@ -70,17 +70,18 @@ def information_extractor(text: str, table_dict: dict):
     add_allowed = True
     for fragment in fragments:
         if col_mode:
-            if fragment in table_dict:
+            column_found = find_column(fragment, table_dict)
+            if column_found:
                 if add_allowed:
-                    columns.append(fragment)
+                    columns.append(column_found)
                 else:
                     columns = []
                     add_allowed = True
-                    columns.append(fragment)
+                    columns.append(column_found)
 
             date = re.search(r'\d\d.\d\d.\d\d\d\d', fragment)
             if date:
-                date = datetime.strptime(date.string, '%d.%m.%Y')
+                date = datetime.strptime(fragment[date.start():date.end()], '%d.%m.%Y')
                 data_dict_cur = data_dict.copy()
                 data_dict_cur['дата'] = date
                 cur_ind = 0
@@ -91,7 +92,7 @@ def information_extractor(text: str, table_dict: dict):
                 continue
         if fill_mode:
             if cur_ind < max_ind:
-                data_dict_cur[columns[cur_ind]] = fragment
+                data_dict_cur[columns[cur_ind]] = value_handler(fragment)
                 cur_ind += 1
             else:
                 data_list.append(data_dict_cur)
@@ -100,3 +101,14 @@ def information_extractor(text: str, table_dict: dict):
     return data_list
 
 
+def find_column(fragment: str, table_dict: dict) -> str or None:
+    columns = [k for k in table_dict.keys()]
+    if fragment != '':
+        for column in columns:
+            if fragment in column:
+                return column
+    return None
+
+
+def value_handler(value: str):
+    return value
