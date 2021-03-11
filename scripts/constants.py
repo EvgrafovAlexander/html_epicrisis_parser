@@ -1,9 +1,3 @@
-COLUMNS = ['id', 'first_name', 'second_name', 'middle_name', 'sex',
-           'dob', 'treatment_start', 'treatment_stop',
-           'base', 'identified', 'form', 'complication', 'respiratory_distress',
-           'is_concomitant_disease', 'conc_dieases_text',
-           'is_weakness', 'is_aches', 'is_dyspnea_at_rest', 'is_dyspnea_at_stress']
-
 DIAG_DICT = {
              # основной диагноз
              'base':

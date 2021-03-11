@@ -1,12 +1,12 @@
-from scripts.constants import COLUMNS
+from scripts.table_constants import TABLE_DICT
 from .date_finder import get_date_between_few_sections
 from .segment_finder import get_sex, get_diagnosis, get_complaints, get_anamnesis, get_test_results
 from .constants import F_DATES
 
 
 def text_parser(text: str, patient_id: int) -> dict:
-    patient_data = {col: None for col in COLUMNS}
-    patient_data['id'] = patient_id
+    base_patient_data = {col: None for col in TABLE_DICT['Основная информация']}
+    base_patient_data['id'] = patient_id
     # break into lines and remove leading and trailing space on each
     #lines = (line.strip() for line in text.splitlines())
     # break multi-headlines into a line each
@@ -15,29 +15,32 @@ def text_parser(text: str, patient_id: int) -> dict:
     #text = '\n'.join(chunk for chunk in chunks if chunk)
 
     name_dict, text = get_sex(text)
-    patient_data.update(name_dict)
+    base_patient_data.update(name_dict)
 
     text = text.lower()
 
     dob = get_date_between_few_sections(F_DATES['dob'], text)
-    patient_data['dob'] = dob
+    base_patient_data['dob'] = dob
 
     treatment_start = get_date_between_few_sections(F_DATES['treatment_start'], text)
-    patient_data['treatment_start'] = treatment_start
+    base_patient_data['treatment_start'] = treatment_start
 
     treatment_stop = get_date_between_few_sections(F_DATES['treatment_stop'], text)
-    patient_data['treatment_stop'] = treatment_stop
+    base_patient_data['treatment_stop'] = treatment_stop
 
     diag_dict, text = get_diagnosis(text)
-    patient_data.update(diag_dict)
+    base_patient_data.update(diag_dict)
 
     comp_dict, text = get_complaints(text)
-    patient_data.update(comp_dict)
+    base_patient_data.update(comp_dict)
 
     anam_dict, text = get_anamnesis(text)
-    patient_data.update(anam_dict)
+    base_patient_data.update(anam_dict)
 
-    test_dict, text = get_test_results(text)
+    test_dict, text = get_test_results(text, patient_id)
+
+    # объединяем текстовые и табличные данные
+    patient_data = {'Основная информация': [base_patient_data]}
     patient_data.update(test_dict)
 
     return patient_data

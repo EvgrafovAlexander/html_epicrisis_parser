@@ -6,7 +6,7 @@ from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIA
 from .number_finder import get_nums_from_text
 from .text_finder import get_end_point, get_end_few_point, \
     get_text_between_few_sections, is_words_in_text
-from .table_finder import create_table_info, table_handler
+from .table_finder import create_table_info, table_handler, prepare_data
 
 
 # ---------- ФИО и пол ----------
@@ -137,11 +137,11 @@ def get_anamnesis(text: str) -> tuple:
 
 
 # ---------- Результаты исследований ----------
-def get_test_results(text: str) -> tuple:
+def get_test_results(text: str, patient_id: int) -> tuple:
     tables_data = {}
     table_info = create_table_info(text)
     for table in table_info:
         table_data = table_handler(text, table)
+        table_data = prepare_data(table_data, patient_id)
         tables_data[table['name']] = table_data
-    tables_data = {'tables': tables_data}
     return tables_data, text

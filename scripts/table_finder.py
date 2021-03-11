@@ -53,7 +53,7 @@ def table_handler(text: str, table_info: dict) -> List[dict]:
         table_text = text[table_info['start']:table_info['stop']]
         table_data = information_extractor(table_text, TABLE_DICT[name])
     else:
-        logging.info('Таблица %s не найдена в словаре.', name)
+        logging.info('Таблица "%s" не найдена в словаре.', name)
     return table_data
 
 
@@ -149,3 +149,9 @@ def delete_empty_rec(data: List[dict]) -> List[dict]:
         if none_columns_sum < all_columns_sum - 1:
             result.append(rec)
     return result
+
+
+def prepare_data(data: list, patient_id: int):
+    for row in data:
+        row['id'] = patient_id
+    return data

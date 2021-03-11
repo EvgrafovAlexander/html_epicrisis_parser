@@ -14,14 +14,11 @@ TABLE_FINDER_DICT = {'Анализ инфекций': ['иммунофермен
                                                         'анализ крови развернутый'],
                      'Общий анализ мокроты': ['общий анализ мокроты'],
                      'Общий (клинический) анализ мочи': ['общий (клинический) анализ мочи',
-                                           'анализ мочи'],
+                                                         'анализ мочи'],
                      'ПЦР': ['определение рнк коронавируса торс'],
                      'Уровень тропонинов': ['исследование уровня тропонинов'],
                      'Уровень ферритина': ['исследование уровня ферритина'],
                      }
-
-
-
 
 COLUMN_TABLE = {'Коагулограмма Covid19': ['date', 'PV', 'MNO', 'D_dimer'],
                 'Общий анализ мочи': ['date', 'glykoza', 'belok', 'pH', 'ud_ves',
@@ -39,33 +36,57 @@ COLUMN_TABLE = {'Коагулограмма Covid19': ['date', 'PV', 'MNO', 'D_d
                                      'KFK', 'Albumin', 'TBil', 'SRB', 'K', 'Na', 'glykoza']
                 }
 
-
-TABLE_DICT = {'Коагулограмма':
-                {
-                'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
-                'аптв': {'name': 'АПТВ', 'type': 'float', 'unit': ['(сек.)']},
-                'мно': {'name': 'МНО', 'type': 'float', 'unit': ['']},
-                'пв': {'name': 'ПВ', 'type': 'float', 'unit': ['(сек.)']},
-                'пти': {'name': 'ПТИ', 'type': 'float', 'unit': ['(%)']},
-                'фибриноген': {'name': 'Фибриноген', 'type': 'float', 'unit': ['(г/л)']}
-                },
-              'Общий анализ крови развернутый':
-                {
-                'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
-                'эритроциты': {'name': 'Эритроциты', 'type': 'float', 'unit': ['(10deg12)']},
-                'тромбоциты': {'name': 'Тромбоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)']},
-                'нейтрофилы': {'name': 'Нейтрофилы', 'type': 'float', 'unit': ['(%)']},
-                'моноциты': {'name': 'Моноциты', 'type': 'float', 'unit': ['(%)']},
-                'лимфоциты': {'name': 'Лимфоциты', 'type': 'float', 'unit': ['(%)']},
-                'лейкоциты': {'name': 'Лейкоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)']},
-                'гемоглобин': {'name': 'Гемоглобин', 'type': 'float', 'unit': ['(г/л)']},
-                'гематокрит': {'name': 'Гематокрит', 'type': 'float', 'unit': ['(%)']},
-                'mcv': {'name': 'MCV', 'type': 'float', 'unit': ['(фл)']},
-                'mch': {'name': 'MCH', 'type': 'float', 'unit': ['(пг)']},
-                'mchc': {'name': 'MCHC', 'type': 'float', 'unit': ['(г/л)']},
-                'mpv': {'name': 'MPV', 'type': 'float', 'unit': ['(фл)']},
-                'эозинофилы': {'name': 'Эозинофилы', 'type': 'float', 'unit': ['(%)']},
-                'базофилы': {'name': 'Базофилы', 'type': 'float', 'unit': ['(%)']},
-                'rdw-sd': {'name': 'RDW-SD', 'type': 'float', 'unit': ['(фл)']}
-                }
-              }
+TABLE_DICT = {
+    'Основная информация':
+        {
+            'id': {'name': 'id', 'type': '', 'unit': []},
+            'first_name': {'name': 'Имя', 'type': '', 'unit': []},
+            'second_name': {'name': 'Фамилия', 'type': '', 'unit': []},
+            'middle_name': {'name': 'Отчество', 'type': '', 'unit': []},
+            'sex': {'name': 'Пол', 'type': '', 'unit': []},
+            'dob': {'name': 'Дата рождения', 'type': '', 'unit': []},
+            'treatment_start': {'name': 'Дата поступления', 'type': '', 'unit': []},
+            'treatment_stop': {'name': 'Дата выписки', 'type': '', 'unit': []},
+            'base': {'name': 'Основной диагноз', 'type': '', 'unit': []},
+            'identified': {'name': 'Обнаружен вирус', 'type': '', 'unit': []},
+            'form': {'name': 'Степень тяжести', 'type': '', 'unit': []},
+            'complication': {'name': 'Осложнения', 'type': '', 'unit': []},
+            'respiratory_distress': {'name': 'Дыхательная недостаточность', 'type': '', 'unit': []},
+            'is_concomitant_disease': {'name': 'Сопутствующие заболевания', 'type': '', 'unit': []},
+            'conc_dieases_text': {'name': 'Перечень соп. заболеваний', 'type': '', 'unit': []},
+            'is_weakness': {'name': 'Слабость', 'type': '', 'unit': []},
+            'is_aches': {'name': 'Кашель', 'type': '', 'unit': []},
+            'is_dyspnea_at_rest': {'name': 'Одышка в покое', 'type': '', 'unit': []},
+            'is_dyspnea_at_stress': {'name': 'Одышка при нагрузке', 'type': '', 'unit': []},
+        },
+    'Коагулограмма':
+        {
+            'id': {'name': 'id', 'type': '', 'unit': []},
+            'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
+            'аптв': {'name': 'АПТВ', 'type': 'float', 'unit': ['(сек.)']},
+            'мно': {'name': 'МНО', 'type': 'float', 'unit': ['']},
+            'пв': {'name': 'ПВ', 'type': 'float', 'unit': ['(сек.)']},
+            'пти': {'name': 'ПТИ', 'type': 'float', 'unit': ['(%)']},
+            'фибриноген': {'name': 'Фибриноген', 'type': 'float', 'unit': ['(г/л)']}
+        },
+    'Общий анализ крови развернутый':
+        {
+            'id': {'name': 'id', 'type': '', 'unit': []},
+            'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
+            'эритроциты': {'name': 'Эритроциты', 'type': 'float', 'unit': ['(10deg12)']},
+            'тромбоциты': {'name': 'Тромбоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)']},
+            'нейтрофилы': {'name': 'Нейтрофилы', 'type': 'float', 'unit': ['(%)']},
+            'моноциты': {'name': 'Моноциты', 'type': 'float', 'unit': ['(%)']},
+            'лимфоциты': {'name': 'Лимфоциты', 'type': 'float', 'unit': ['(%)']},
+            'лейкоциты': {'name': 'Лейкоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)']},
+            'гемоглобин': {'name': 'Гемоглобин', 'type': 'float', 'unit': ['(г/л)']},
+            'гематокрит': {'name': 'Гематокрит', 'type': 'float', 'unit': ['(%)']},
+            'mcv': {'name': 'MCV', 'type': 'float', 'unit': ['(фл)']},
+            'mch': {'name': 'MCH', 'type': 'float', 'unit': ['(пг)']},
+            'mchc': {'name': 'MCHC', 'type': 'float', 'unit': ['(г/л)']},
+            'mpv': {'name': 'MPV', 'type': 'float', 'unit': ['(фл)']},
+            'эозинофилы': {'name': 'Эозинофилы', 'type': 'float', 'unit': ['(%)']},
+            'базофилы': {'name': 'Базофилы', 'type': 'float', 'unit': ['(%)']},
+            'rdw-sd': {'name': 'RDW-SD', 'type': 'float', 'unit': ['(фл)']}
+        }
+}
