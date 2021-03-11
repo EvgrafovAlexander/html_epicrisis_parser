@@ -40,25 +40,5 @@ def main():
     logging.info('Продолжительность обработки: %.2f с.', float(work_interval / 10**6))
 
 
-'''
-re.findall(r'\bB\w+', text, flags=re.IGNORECASE)  
-r"[А-Я][а-я]+\s[А-Я][а-я]+\s[А-Я][а-я]+"
-    d = {'col1': [1, 2], 'col2': [3, 4]}
-    df = pd.DataFrame(data=d)
-    df.to_excel("output.xlsx")
-'''
-
-
-
 if __name__ == "__main__":
     main()
-
-
-'''
-    # break into lines and remove leading and trailing space on each
-    lines = (line.strip() for line in text.splitlines())
-    # break multi-headlines into a line each
-    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-    # drop blank lines
-    text = '\n'.join(chunk for chunk in chunks if chunk)
-'''

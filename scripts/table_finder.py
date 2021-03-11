@@ -2,7 +2,6 @@ import re, logging
 from datetime import datetime
 from typing import List
 from .table_constants import TABLE_FINDER_DICT, TABLE_DICT
-from .date_finder import get_date_between_sections
 
 
 def create_table_info(text: str) -> List[dict]:
@@ -47,17 +46,18 @@ def order_table_info(text: str, seg_tables: list) -> List[dict]:
     return segmented_table_info
 
 
-def table_handler(text: str, table_info: dict) -> dict:
+def table_handler(text: str, table_info: dict) -> List[dict]:
+    table_data = []
     name = table_info['name']
     if name in TABLE_DICT:
         table_text = text[table_info['start']:table_info['stop']]
-        information_extractor(table_text, TABLE_DICT[name])
+        table_data = information_extractor(table_text, TABLE_DICT[name])
     else:
         logging.info('Таблица %s не найдена в словаре.', name)
-    return {}
+    return table_data
 
 
-def information_extractor(text: str, table_dict: dict):
+def information_extractor(text: str, table_dict: dict) -> List[dict]:
     data_list = []
     data_dict = {key: None for key in table_dict.keys()}
 

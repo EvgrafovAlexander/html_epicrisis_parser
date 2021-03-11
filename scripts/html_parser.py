@@ -38,5 +38,6 @@ def text_parser(text: str, patient_id: int) -> dict:
     patient_data.update(anam_dict)
 
     test_dict, text = get_test_results(text)
+    patient_data.update(test_dict)
 
     return patient_data

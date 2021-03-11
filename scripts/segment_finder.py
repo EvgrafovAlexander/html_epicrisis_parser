@@ -133,15 +133,15 @@ def get_anamnesis(text: str) -> tuple:
     else:
         logging.info('Не найден фрагмент: Анамнез')
     text = text[get_end_few_point(text, END_ANAM):]
-    return (anamn_dict, text)
+    return anamn_dict, text
 
 
 # ---------- Результаты исследований ----------
 def get_test_results(text: str) -> tuple:
-    table_data_dict = {}
+    tables_data = {}
     table_info = create_table_info(text)
     for table in table_info:
         table_data = table_handler(text, table)
-        table_data_dict[table['name']] = table_data
-
-    return (1, 2)
+        tables_data[table['name']] = table_data
+    tables_data = {'tables': tables_data}
+    return tables_data, text
