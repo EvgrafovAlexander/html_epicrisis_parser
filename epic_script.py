@@ -17,13 +17,13 @@ def main():
     data_dfs = create_df_dict(TABLE_DICT)
 
     for name in file_names:
-        logging.info('Документ ' + str(name) + ' в обработке:')
+        logging.info('Документ {} в обработке:'.format(name))
         with codecs.open(PATH + name, "r", "utf-8") as html:
             text = BeautifulSoup(html, features="html.parser").get_text()
             patient_data = text_parser(text, patient_id)
             data_dfs = add_patient(data_dfs, patient_data)
             patient_id += 1
-        logging.info('Документ ' + str(name) + ' обработан\n')
+        logging.info('Документ {} обработан\n'.format(name))
 
     save_dfs(data_dfs)
 

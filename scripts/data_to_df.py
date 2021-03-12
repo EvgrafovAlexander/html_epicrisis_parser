@@ -33,10 +33,10 @@ def save_dfs(data_dfs: dict):
     with pd.ExcelWriter('output.xlsx') as writer:
         for df_name in data_dfs:
             df = data_dfs[df_name]
-            df = presave_prepare(df)
+            df = presave_prepare(df, df_name)
             df.to_excel(writer, sheet_name=df_name, startrow=0, startcol=0, index=False)
 
 
-def presave_prepare(df: pd.DataFrame) -> pd.DataFrame:
+def presave_prepare(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
     df.replace({True: '+', False: '-'}, inplace=True)
     return df

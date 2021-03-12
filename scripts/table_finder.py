@@ -58,16 +58,21 @@ def table_handler(text: str, table_info: dict) -> List[dict]:
 
 
 def information_extractor(text: str, table_dict: dict) -> List[dict]:
+    """Извлечь информацию из текстового фрагмента.
+    Включает 2 режима:
+    - col_mode (not fill_mode) - собирает список параметров, исходя
+    из перечня возможных параметров конкретной таблицы;
+    - fill_mode - заполняет словарь в соответствии с собранным списком"""
     data_list = []
     data_dict = {key: None for key in table_dict.keys()}
 
     fragments = text.split('\n')
     columns = []
-    col_mode, fill_mode = True, False
+    fill_mode = False
     cur_ind, max_ind, data_dict_cur = 0, 0, {}
     add_allowed = True
     for fragment in fragments:
-        if col_mode:
+        if not fill_mode:
             column_found = find_column(fragment, table_dict)
             if column_found:
                 if add_allowed:
@@ -84,11 +89,10 @@ def information_extractor(text: str, table_dict: dict) -> List[dict]:
                 data_dict_cur['дата'] = date
                 cur_ind = 0
                 max_ind = len(columns)
-                col_mode = False
                 fill_mode = True
                 add_allowed = False
                 continue
-        if fill_mode:
+        else:
             if cur_ind < max_ind:
                 data_dict_cur[columns[cur_ind]] = value_handler(fragment,
                                                                 columns[cur_ind],
@@ -97,7 +101,6 @@ def information_extractor(text: str, table_dict: dict) -> List[dict]:
             else:
                 data_list.append(data_dict_cur)
                 fill_mode = False
-                col_mode = True
     if len(data_list):
         data_list = delete_empty_rec(data_list)
     return data_list
@@ -129,7 +132,9 @@ def value_parser(value: str, value_type: str, value_unit: List[str]):
         if len(matches):
             parsed_value = float(matches[0])
     elif value != '':
-        logging.info('Недостоверное значение: %s', value_unit)
+        logging.info("""Недостоверное значение: 
+                    Значение: {}
+                    Ожидаемые единицы измерения: {}""".format(value, value_unit))
     return parsed_value
 
 
