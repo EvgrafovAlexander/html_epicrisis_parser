@@ -1,4 +1,5 @@
 import re, logging
+from collections import Counter
 from datetime import datetime
 from typing import List
 from .table_constants import TABLE_FINDER_DICT, TABLE_DICT
@@ -20,6 +21,7 @@ def create_table_info(text: str) -> List[dict]:
 
 
 def get_table_begin(text: str, table_names: list) -> int or None:
+    """Найти индекс начала таблицы по ее наименованию"""
     for name in table_names:
         found = re.search(name, text)
         if found:
@@ -107,6 +109,8 @@ def information_extractor(text: str, table_dict: dict) -> List[dict]:
 
 
 def find_column(fragment: str, table_dict: dict) -> str or None:
+    """Найти соответствие фрагмента текста
+    с наименованием известных столбцов таблицы"""
     columns = [k for k in table_dict.keys()]
     if fragment != '':
         for column in columns:
@@ -115,6 +119,7 @@ def find_column(fragment: str, table_dict: dict) -> str or None:
     return None
 
 
+# TODO - возможно, объединить с value_parser
 def value_handler(value: str, column: str, table_dict: dict):
     value_type = table_dict['type']
     value_unit = table_dict['unit']
@@ -170,6 +175,30 @@ def prepare_value(value: str) -> str:
 def prepare_data(data: list, patient_id: int):
     """Подготовить список записей перед отправкой
     в основную функцию (уровень List[dict])"""
+
+    # 1. добавить patient_id
     for row in data:
         row['id'] = patient_id
-    return data
+
+    # 2. объединить данные с одинаковыми датами
+    result_data = []
+    dates_cnt = Counter([row['дата'] for row in data])
+    for date in dates_cnt:
+        data_on_date = [row for row in data if row['дата'] == date]
+        if dates_cnt[date] == 1:
+            result_data.append(data_on_date[0])
+        else:
+            result_data.append(union_data_by_date(data_on_date))
+    return result_data
+
+
+def union_data_by_date(data: List[dict]) -> dict:
+    """Объединить несколько строк одного вида анализа
+    с одинаковыми датами в одну строку"""
+    result = {col: None for col in data[0].keys()}
+    for col in result:
+        for row in data:
+            if row[col] is not None and result[col] is None:
+                result[col] = row[col]
+                continue
+    return result
