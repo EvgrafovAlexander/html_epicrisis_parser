@@ -12,7 +12,7 @@ def main():
     logging.basicConfig(filename='logs.log', level=logging.INFO)
     logging.info('Начало обработки')
 
-    id = 1
+    patient_id = 100001
     file_names = os.listdir(path=PATH)
     data_dfs = create_df_dict(TABLE_DICT)
 
@@ -20,9 +20,9 @@ def main():
         logging.info('Документ ' + str(name) + ' в обработке:')
         with codecs.open(PATH + name, "r", "utf-8") as html:
             text = BeautifulSoup(html, features="html.parser").get_text()
-            patient_data = text_parser(text, id)
+            patient_data = text_parser(text, patient_id)
             data_dfs = add_patient(data_dfs, patient_data)
-            id += 1
+            patient_id += 1
         logging.info('Документ ' + str(name) + ' обработан\n')
 
     save_dfs(data_dfs)

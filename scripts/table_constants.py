@@ -67,7 +67,8 @@ TABLE_DICT = {
             'мно': {'name': 'МНО', 'type': 'float', 'unit': ['']},
             'пв': {'name': 'ПВ', 'type': 'float', 'unit': ['(сек.)']},
             'пти': {'name': 'ПТИ', 'type': 'float', 'unit': ['(%)']},
-            'фибриноген': {'name': 'Фибриноген', 'type': 'float', 'unit': ['(г/л)']}
+            'фибриноген': {'name': 'Фибриноген', 'type': 'float', 'unit': ['(г/л)', '(г/дл)']},
+            'inn ddi': {'name': 'INN Ddi', 'type': 'float', 'unit': ['(мг/л)']}
         },
     'Общий анализ крови развернутый':
         {
@@ -79,11 +80,11 @@ TABLE_DICT = {
             'моноциты': {'name': 'Моноциты', 'type': 'float', 'unit': ['(%)']},
             'лимфоциты': {'name': 'Лимфоциты', 'type': 'float', 'unit': ['(%)']},
             'лейкоциты': {'name': 'Лейкоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)']},
-            'гемоглобин': {'name': 'Гемоглобин', 'type': 'float', 'unit': ['(г/л)']},
+            'гемоглобин': {'name': 'Гемоглобин', 'type': 'float', 'unit': ['(г/л)', '(г/дл)']},
             'гематокрит': {'name': 'Гематокрит', 'type': 'float', 'unit': ['(%)']},
             'mcv': {'name': 'MCV', 'type': 'float', 'unit': ['(фл)']},
             'mch': {'name': 'MCH', 'type': 'float', 'unit': ['(пг)']},
-            'mchc': {'name': 'MCHC', 'type': 'float', 'unit': ['(г/л)']},
+            'mchc': {'name': 'MCHC', 'type': 'float', 'unit': ['(г/л)', '(г/дл)']},
             'mpv': {'name': 'MPV', 'type': 'float', 'unit': ['(фл)']},
             'эозинофилы': {'name': 'Эозинофилы', 'type': 'float', 'unit': ['(%)']},
             'базофилы': {'name': 'Базофилы', 'type': 'float', 'unit': ['(%)']},

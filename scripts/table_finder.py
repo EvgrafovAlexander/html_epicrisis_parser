@@ -123,17 +123,19 @@ def value_parser(value: str, value_type: str, value_unit: List[str]):
     re_dict = {'float': r'^\d+(?:[\.,]\d+)?',
                'int': r'^\d+(?:[\.,]\d+)?'}
     parsed_value = None
-    value = value.replace(',', '.').replace('^', 'deg')
+    value = prepare_value(value)
     if is_unit_matched(value, value_unit):
         matches = re.findall(re_dict[value_type], value)
         if len(matches):
             parsed_value = float(matches[0])
-    else:
+    elif value != '':
         logging.info('Недостоверное значение: %s', value_unit)
     return parsed_value
 
 
 def is_unit_matched(value: str, units: List[str]) -> bool:
+    """Проверка совпадения единиц измерения
+       полученного и ожидаемого значения"""
     for unit in units:
         matches = re.findall(unit, value)
         if len(matches):
@@ -142,6 +144,8 @@ def is_unit_matched(value: str, units: List[str]) -> bool:
 
 
 def delete_empty_rec(data: List[dict]) -> List[dict]:
+    """Удалить из результата записи,
+    содержащие менее 2 единиц информации"""
     result = []
     for rec in data:
         all_columns_sum = len(rec.keys())
@@ -151,7 +155,16 @@ def delete_empty_rec(data: List[dict]) -> List[dict]:
     return result
 
 
+def prepare_value(value: str) -> str:
+    """Подготовить полученное значение
+    к обработке парсером"""
+    value = value.replace(',', '.').replace('^', 'deg')
+    return value
+
+
 def prepare_data(data: list, patient_id: int):
+    """Подготовить список записей перед отправкой
+    в основную функцию (уровень List[dict])"""
     for row in data:
         row['id'] = patient_id
     return data
