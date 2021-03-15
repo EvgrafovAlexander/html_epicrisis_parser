@@ -11,10 +11,10 @@ from .table_finder import create_table_info, table_handler, prepare_data
 
 # ---------- ФИО и пол ----------
 def get_sex(text: str) -> tuple:
-    name_dict = {'first_name': None,
-                 'second_name': None,
-                 'middle_name': None,
-                 'sex': None}
+    name_dict = {'имя': None,
+                 'фамилия': None,
+                 'отчество': None,
+                 'пол': None}
     found = find_names(text)
     if len(found) > 0:
         full_name = found[0].title().split()
@@ -27,10 +27,10 @@ def get_sex(text: str) -> tuple:
         else:
             sex = None
 
-        name_dict['first_name'] = first_name
-        name_dict['second_name'] = second_name
-        name_dict['middle_name'] = middle_name
-        name_dict['sex'] = sex
+        name_dict['имя'] = first_name
+        name_dict['фамилия'] = second_name
+        name_dict['отчество'] = middle_name
+        name_dict['пол'] = sex
 
         return (name_dict, text[get_end_point(text, middle_name):])
     else:

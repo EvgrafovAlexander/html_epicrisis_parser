@@ -3,6 +3,7 @@ from collections import Counter
 from datetime import datetime
 from typing import List
 from .table_constants import TABLE_FINDER_DICT, TABLE_DICT
+from .classifier import classify_by_dict
 
 
 def create_table_info(text: str) -> List[dict]:
@@ -119,27 +120,43 @@ def find_column(fragment: str, table_dict: dict) -> str or None:
     return None
 
 
-# TODO - возможно, объединить с value_parser
 def value_handler(value: str, column: str, table_dict: dict):
     value_type = table_dict['type']
     value_unit = table_dict['unit']
-    value = value_parser(value, value_type, value_unit)
+    if value_type in ['float']:
+        value = value_parser_float(value, value_type, value_unit)
+    if value_type in ['class']:
+        value = value_parser_mixed(value, value_type, value_unit)
     return value
 
 
-def value_parser(value: str, value_type: str, value_unit: List[str]):
-    re_dict = {'float': r'^\d+(?:[\.,]\d+)?',
-               'int': r'^\d+(?:[\.,]\d+)?'}
+def value_parser_float(value: str, value_type: str, value_unit: List[str]):
     parsed_value = None
+    re_dict = {'float': r'^\d+(?:[\.,]\d+)?'}
     value = prepare_value(value)
     if is_unit_matched(value, value_unit):
         matches = re.findall(re_dict[value_type], value)
         if len(matches):
             parsed_value = float(matches[0])
-    elif value != '':
+    elif value not in ['', '\xa0']:
         logging.info("""Недостоверное значение: 
                     Значение: {}
                     Ожидаемые единицы измерения: {}""".format(value, value_unit))
+    return parsed_value
+
+
+def value_parser_class(value: str, value_type: str, classes: dict):
+    parsed_value = classify_by_dict(value, classes)
+    return parsed_value
+
+
+def value_parser_mixed(value: str, value_type: str, classes: dict):
+    value = prepare_value(value)
+    matches = re.findall(r'^\d+(?:[\.,]\d+)?', value)
+    if len(matches):
+        parsed_value = float(matches[0])
+    else:
+        parsed_value = classify_by_dict(value, classes)
     return parsed_value
 
 
