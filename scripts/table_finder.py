@@ -115,7 +115,7 @@ def find_column(fragment: str, table_dict: dict) -> str or None:
     columns = [k for k in table_dict.keys()]
     if fragment != '':
         for column in columns:
-            if fragment in column:
+            if column in fragment:
                 return column
     return None
 
@@ -127,6 +127,8 @@ def value_handler(value: str, column: str, table_dict: dict):
         value = value_parser_float(value, value_type, value_unit)
     if value_type in ['class']:
         value = value_parser_mixed(value, value_type, value_unit)
+    if value_type in ['not']:
+        value = value
     return value
 
 

@@ -144,4 +144,7 @@ def get_test_results(text: str, patient_id: int) -> tuple:
         table_data = table_handler(text, table)
         table_data = prepare_data(table_data, patient_id)
         tables_data[table['name']] = table_data
+    if len(table_info):
+        start = table_info[-1]['start']
+        text = text[start:]
     return tables_data, text
