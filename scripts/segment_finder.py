@@ -1,4 +1,5 @@
 import re, logging
+from datetime import datetime, timedelta
 
 from .classifier import classify_by_dict
 from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIAG, F_COMPLAINTS, COMPLAINTS_DICT, \
@@ -7,6 +8,7 @@ from .number_finder import get_nums_from_text
 from .text_finder import get_end_point, get_end_few_point, \
     get_text_between_few_sections, is_words_in_text
 from .table_finder import create_table_info, table_handler, prepare_data
+from .date_finder import get_date_in_fragment
 
 
 # ---------- ФИО и пол ----------
@@ -120,20 +122,51 @@ def get_complaints(text: str) -> tuple:
     else:
         logging.info('Не найден фрагмент: Жалобы')
     text = text[get_end_few_point(text, END_COMP):]
-    return (compl_dict, text)
+    return compl_dict, text
 
 
 # ---------- Анамнез ----------
-def get_anamnesis(text: str) -> tuple:
+def get_anamnesis(text: str, treatment_start_date) -> tuple:
     anamn_dict = {}
     anamn_text = get_text_between_few_sections(F_ANAMNESIS, text)
     if anamn_text:
         # TODO: Выполнить парсинг анамнеза
-        pass
+        start_disease_date = get_start_disease_date(text, treatment_start_date)
+        anamn_dict['start_disease_date'] = start_disease_date
     else:
         logging.info('Не найден фрагмент: Анамнез')
     text = text[get_end_few_point(text, END_ANAM):]
     return anamn_dict, text
+
+
+def get_start_disease_date(text: str, treatment_start_date):
+    start_disease_date = None
+    if treatment_start_date is None:
+        return start_disease_date
+
+    reg_list = [{'reg_exp': r'заболел?\w+\s+\d+\s+дн?\w+\s+назад', 'form': 'num'},
+                {'reg_exp': r'заболел?\w+\s+\d+-\d+\s+дн?\w+\s+назад', 'form': 'interval'},
+                {'reg_exp': r'заболел?\w+\s+\d+.\d+.\d+.', 'form': 'date'}]
+
+    for reg_exp in reg_list:
+        matches = re.findall(reg_exp['reg_exp'], text)
+        if matches:
+            if reg_exp['form'] == 'num':
+                matches = re.findall(r'\d+', matches[0])
+                if matches:
+                    days_ago = int(matches[0])
+                    start_disease_date = treatment_start_date - timedelta(days=days_ago)
+                    break
+            if reg_exp['form'] == 'interval':
+                matches = re.findall(r'\d+', matches[0])
+                if matches:
+                    days_ago = int(sum(list(map(int, matches))) / len(matches))
+                    start_disease_date = treatment_start_date - timedelta(days=days_ago)
+                    break
+            if reg_exp['form'] == 'date':
+                start_disease_date = get_date_in_fragment(matches[0])
+                break
+    return start_disease_date
 
 
 # ---------- Результаты исследований ----------

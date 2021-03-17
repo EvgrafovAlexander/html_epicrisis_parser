@@ -34,7 +34,7 @@ def text_parser(text: str, patient_id: int) -> dict:
     comp_dict, text = get_complaints(text)
     base_patient_data.update(comp_dict)
 
-    anam_dict, text = get_anamnesis(text)
+    anam_dict, text = get_anamnesis(text, base_patient_data['treatment_start'])
     base_patient_data.update(anam_dict)
 
     test_dict, text = get_test_results(text, patient_id)
