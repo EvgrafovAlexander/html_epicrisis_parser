@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 
 from .classifier import classify_by_dict
 from .constants import DIAG_DICT, F_BASE_DIAG, F_COMP_DIAG, F_CONC_DIAG, END_DIAG, F_COMPLAINTS, COMPLAINTS_DICT, \
-    F_TEXT, END_COMP, F_ANAMNESIS, END_ANAM
+    F_TEXT, END_COMP, F_ANAMNESIS, END_ANAM, F_TREATMENTS, END_TREA
+from .table_constants import TABLE_DICT
 from .number_finder import get_nums_from_text
 from .text_finder import get_end_point, get_end_few_point, \
     get_text_between_few_sections, is_words_in_text
@@ -34,10 +35,10 @@ def get_sex(text: str) -> tuple:
         name_dict['отчество'] = middle_name
         name_dict['пол'] = sex
 
-        return (name_dict, text[get_end_point(text, middle_name):])
+        return name_dict, text[get_end_point(text, middle_name):]
     else:
         logging.info('Не найден фрагмент: ФИО и пол')
-        return (name_dict, text)
+        return name_dict, text
 
 
 def find_names(text: str) -> str or None:
@@ -70,7 +71,7 @@ def get_diagnosis(text: str) -> tuple:
     else:
         logging.info('Не найден фрагмент: Диагноз')
     text = text[get_end_few_point(text, END_DIAG):]
-    return (diag_dict, text)
+    return diag_dict, text
 
 
 def find_diagnosis(text: str, diag_dict: dict, type: str) -> dict:
@@ -127,19 +128,19 @@ def get_complaints(text: str) -> tuple:
 
 # ---------- Анамнез ----------
 def get_anamnesis(text: str, treatment_start_date) -> tuple:
-    anamn_dict = {}
+    anamn_dict, drugs_before = {}, {}
     anamn_text = get_text_between_few_sections(F_ANAMNESIS, text)
     if anamn_text:
-        # TODO: Выполнить парсинг анамнеза
-        start_disease_date = get_start_disease_date(text, treatment_start_date)
-        anamn_dict['start_disease_date'] = start_disease_date
+        anamn_dict['start_disease_date'] = get_start_disease_date(text, treatment_start_date)
+        anamn_dict['perc_of_defeat'] = get_perc_of_defeat(anamn_text)
+        drugs_before = get_drugs(anamn_text, TABLE_DICT['Перед госпитализацией'])
     else:
         logging.info('Не найден фрагмент: Анамнез')
     text = text[get_end_few_point(text, END_ANAM):]
-    return anamn_dict, text
+    return anamn_dict, drugs_before, text
 
 
-def get_start_disease_date(text: str, treatment_start_date):
+def get_start_disease_date(text: str, treatment_start_date) -> datetime or None:
     start_disease_date = None
     if treatment_start_date is None:
         return start_disease_date
@@ -169,6 +170,24 @@ def get_start_disease_date(text: str, treatment_start_date):
     return start_disease_date
 
 
+def get_perc_of_defeat(text: str) -> int or None:
+    perc_of_defeat = None
+    reg_exp = r'\d+\s?%'
+    matches = re.findall(reg_exp, text)
+    if matches:
+        matches = re.findall(r'\d+', matches[0])
+        if matches:
+            perc_of_defeat = int(matches[0])
+    return perc_of_defeat
+
+
+def get_drugs(text: str, drugs_dict: dict) -> dict:
+    drugs = {}
+    for drug in drugs_dict:
+        drugs[drug] = True if is_words_in_text(drugs_dict[drug]['unit'], text) else False
+    return drugs
+
+
 # ---------- Результаты исследований ----------
 def get_test_results(text: str, patient_id: int) -> tuple:
     tables_data = {}
@@ -181,3 +200,16 @@ def get_test_results(text: str, patient_id: int) -> tuple:
         start = table_info[-1]['start']
         text = text[start:]
     return tables_data, text
+
+
+# ---------- Лечение ----------
+# TODO - добавить проверку: если вместо фрагмента получен весь текст - пропустить анализ
+def get_treatment(text, patient_id) -> tuple:
+    drugs_during = {}
+    treat_text = get_text_between_few_sections(F_TREATMENTS, text)
+    if treat_text:
+        drugs_during = get_drugs(treat_text, TABLE_DICT['Во время госпитализации'])
+    else:
+        logging.info('Не найден фрагмент: Лечение во время госпитализации')
+    text = text[get_end_few_point(text, END_TREA):]
+    return drugs_during, text

@@ -52,7 +52,7 @@ def get_date_between_few_sections(sections: list, text: str) -> datetime or None
 
 def get_date_in_fragment(text: str) -> datetime or None:
     # 27.12.1985
-    matches = re.findall(r'\d\d.\d\d.\d\d\d\d', text)
+    matches = re.findall(r'\d+.\d\d.\d\d\d\d', text)
     if matches:
         return datetime.strptime(matches[0], '%d.%m.%Y').date()
     # 27.12.85
