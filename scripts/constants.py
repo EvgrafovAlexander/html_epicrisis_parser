@@ -1,3 +1,5 @@
+TXT_TYPE = True
+
 DIAG_DICT = {
              # основной диагноз
              'base':
@@ -95,3 +97,5 @@ END_ANAM = ['лабораторных исследований', 'обследо
 END_TREA = ['рекомендации']
 
 PATH = './Epicrises/'
+PATH_ANON_LOAD = './Epicrises_for_anon/'
+PATH_ANON_SAVE = './Anon_data/'

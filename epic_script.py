@@ -2,7 +2,7 @@ import codecs, os, logging
 from bs4 import BeautifulSoup
 from datetime import datetime
 from scripts.data_to_df import add_patient, create_df_dict, save_dfs
-from scripts.constants import PATH
+from scripts.constants import PATH, TXT_TYPE
 from scripts.html_parser import text_parser
 from scripts.table_constants import TABLE_DICT
 
@@ -18,8 +18,12 @@ def main():
 
     for name in file_names:
         logging.info('Документ %s в обработке:', name)
-        with codecs.open(PATH + name, "r", "utf-8") as html:
-            text = BeautifulSoup(html, features="html.parser").get_text()
+        with codecs.open(PATH + name, "r", encoding="utf-8") as html:
+            if TXT_TYPE:
+                text = html.read()
+            else:
+                text = BeautifulSoup(html, features="html.parser").get_text()
+
             patient_data = text_parser(text, patient_id)
             data_dfs = add_patient(data_dfs, patient_data)
             patient_id += 1
