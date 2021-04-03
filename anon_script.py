@@ -41,7 +41,6 @@ def main():
 
 
 def anonymize(text: str, data: dict) -> str:
-
     data_for_anon = {'Мужской': {'имя': 'Иван', 'фамилия': 'Иванов', 'отчество': 'Иванович'},
                      'Женский': {'имя': 'Мария', 'фамилия': 'Петрова', 'отчество': 'Ивановна'}}
     if data['пол'] is not None:
@@ -50,6 +49,12 @@ def anonymize(text: str, data: dict) -> str:
             if data[word] is not None:
                 text = re.sub(data[word], data_for_anon[word], text)
                 text = re.sub(data[word].upper(), data_for_anon[word], text)
+    if data['dob'] is not None:
+        dob = data['dob']
+        anon_dob = dob.replace(month=1, day=1)
+        dob_str = dob.strftime('%d.%m.%Y')
+        anon_dob_str = anon_dob.strftime('%d.%m.%Y')
+        text = re.sub(dob_str, anon_dob_str, text)
     return text
 
 
