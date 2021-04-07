@@ -19,7 +19,7 @@ def get_sex(text: str) -> tuple:
                  'отчество': None,
                  'пол': None}
     found = find_names(text)
-    if len(found) > 0:
+    if found is not None and len(found) > 0:
         full_name = found[0].title().split()
         second_name, first_name, middle_name = full_name
 

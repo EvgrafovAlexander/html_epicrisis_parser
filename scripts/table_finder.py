@@ -140,7 +140,7 @@ def value_parser_float(value: str, value_type: str, value_unit: List[str]):
         matches = re.findall(re_dict[value_type], value)
         if len(matches):
             parsed_value = float(matches[0])
-    elif value not in ['', '\xa0']:
+    elif value.rstrip() not in ['', '\xa0']:
         logging.info("""Недостоверное значение: 
                     Значение: {}
                     Ожидаемые единицы измерения: {}""".format(value, value_unit))

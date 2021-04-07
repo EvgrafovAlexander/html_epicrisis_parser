@@ -1,7 +1,7 @@
 import codecs, os, logging
 from bs4 import BeautifulSoup
 from datetime import datetime
-from scripts.data_to_df import add_patient, create_df_dict, save_dfs
+from scripts.data_to_df import add_patient, create_df_dict, save_dfs, prepare_dfs
 from scripts.constants import PATH, TXT_TYPE
 from scripts.html_parser import text_parser
 from scripts.table_constants import TABLE_DICT
@@ -29,6 +29,7 @@ def main():
             patient_id += 1
         logging.info('Документ %s обработан\n', name)
 
+    data_dfs = prepare_dfs(data_dfs)
     save_dfs(data_dfs)
 
     work_interval = (datetime.today() - start_date).microseconds

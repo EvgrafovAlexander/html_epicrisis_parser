@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import timedelta
 
 
 def create_df_dict(table_dict: dict) -> dict:
@@ -40,3 +41,28 @@ def save_dfs(data_dfs: dict):
 def presave_prepare(df: pd.DataFrame, df_name: str) -> pd.DataFrame:
     df.replace({True: '+', False: '-'}, inplace=True)
     return df
+
+
+def prepare_dfs(data_dfs: dict) -> dict:
+    main_df = data_dfs['Основная информация']
+    main_df = main_df.apply(form_start_disease_date, axis=1)
+
+    df_start_disease = main_df[['id', 'start_disease_date']].copy()
+    df_start_disease['start_disease_date'] = pd.to_datetime(df_start_disease['start_disease_date'], format='%Y-%m-%d')
+
+    table_names = set(data_dfs.keys()) - {'Основная информация', 'Перед госпитализацией',
+                                          'После госпитализации', 'Во время госпитализации'}
+    for table_name in table_names:
+        df = data_dfs[table_name]
+        df = df.join(df_start_disease.set_index('id'), on='id')
+        df['дней с начала болезни'] = (df['дата'] - df['start_disease_date']).dt.days
+        data_dfs[table_name] = df
+
+    data_dfs['Основная информация'] = main_df
+    return data_dfs
+
+
+def form_start_disease_date(row):
+    if row['start_disease_date'] is None and row['treatment_start'] is not None:
+        row['start_disease_date'] = row['treatment_start'] - timedelta(days=4)
+    return row
