@@ -17,7 +17,7 @@ def main():
     data_dfs = create_df_dict(TABLE_DICT)
 
     for name in file_names:
-        logging.info('Документ %s в обработке:', name)
+        logging.info('Документ %s в обработке с id = %s:', name, patient_id)
         with codecs.open(PATH + name, "r", encoding="utf-8") as html:
             if TXT_TYPE:
                 text = html.read()

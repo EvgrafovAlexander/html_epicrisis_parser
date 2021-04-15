@@ -53,6 +53,7 @@ def table_handler(text: str, table_info: dict) -> List[dict]:
     table_data = []
     name = table_info['name']
     if name in TABLE_DICT:
+        logging.info('Обработка таблицы: "%s"', name)
         table_text = text[table_info['start']:table_info['stop']]
         table_data = information_extractor(table_text, TABLE_DICT[name])
     else:
