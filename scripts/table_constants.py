@@ -70,7 +70,7 @@ COLUMN_TABLE = {'Коагулограмма Covid19': ['date', 'PV', 'MNO', 'D_d
 TABLE_DICT = {
     'Основная информация':
         {
-            'id': {'name': 'id', 'type': '', 'unit': []},
+            'patient_id': {'name': 'patient_id', 'type': '', 'unit': []},
             'имя': {'name': 'Имя', 'type': '', 'unit': []},
             'фамилия': {'name': 'Фамилия', 'type': '', 'unit': []},
             'отчество': {'name': 'Отчество', 'type': '', 'unit': []},
@@ -94,7 +94,7 @@ TABLE_DICT = {
         },
     'Коагулограмма':
         {
-            'id': {'name': 'id', 'type': '', 'unit': []},
+            'patient_id': {'name': 'patient_id', 'type': '', 'unit': []},
             'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
             'аптв': {'name': 'АПТВ', 'type': 'float', 'unit': ['(сек.)']},
             'мно': {'name': 'МНО', 'type': 'float', 'unit': ['']},
@@ -106,14 +106,14 @@ TABLE_DICT = {
         },
     'Общий анализ крови развернутый':
         {
-            'id': {'name': 'id', 'type': '', 'unit': []},
+            'patient_id': {'name': 'patient_id', 'type': '', 'unit': []},
             'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
             'эритроциты': {'name': 'Эритроциты', 'type': 'float', 'unit': ['(10deg12)']},
-            'тромбоциты': {'name': 'Тромбоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)']},
+            'тромбоциты': {'name': 'Тромбоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)', '(10deg9 л)']},
             'нейтрофилы': {'name': 'Нейтрофилы', 'type': 'float', 'unit': ['(%)']},
             'моноциты': {'name': 'Моноциты', 'type': 'float', 'unit': ['(%)']},
             'лимфоциты': {'name': 'Лимфоциты', 'type': 'float', 'unit': ['(%)']},
-            'лейкоциты': {'name': 'Лейкоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)']},
+            'лейкоциты': {'name': 'Лейкоциты', 'type': 'float', 'unit': ['(10deg9)', '(10 в 9 ст. /л)', '(10deg9 л)']},
             'гемоглобин': {'name': 'Гемоглобин', 'type': 'float', 'unit': ['(г/л)', '(г/дл)', '(g/l)']},
             'гематокрит': {'name': 'Гематокрит', 'type': 'float', 'unit': ['(%)']},
             'mcv': {'name': 'MCV', 'type': 'float', 'unit': ['(фл)', '(fl)']},
@@ -126,16 +126,16 @@ TABLE_DICT = {
         },
     'ОАК Covid19':
         {
-            'id': {'name': 'id', 'type': '', 'unit': []},
+            'patient_id': {'name': 'patient_id', 'type': '', 'unit': []},
             'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
-            'wbc': {'name': 'Лейкоциты', 'type': 'float', 'unit': ['(10deg9/л)']},
+            'wbc': {'name': 'Лейкоциты', 'type': 'float', 'unit': ['(10deg9/л)', '(10deg9 л)']},
             'rbc': {'name': 'Эритроциты', 'type': 'float', 'unit': ['(10deg12/л)']},
             'mcv': {'name': 'Средний объем эритроцитов', 'type': 'float', 'unit': ['(фл)']},
             'hct': {'name': 'Гематокрит', 'type': 'float', 'unit': ['(%)']},
             'hgb': {'name': 'Гемоглобин', 'type': 'float', 'unit': ['(г/л)']},
             'mch (': {'name': 'Среднее гемоглобина в эритроците', 'type': 'float', 'unit': ['(пг)']},
             'mchc (': {'name': 'Среднее гемоглобина в эритроците', 'type': 'float', 'unit': ['(г/л)']},
-            'plt': {'name': 'Тромбоциты', 'type': 'float', 'unit': ['(10deg9/л)']},
+            'plt': {'name': 'Тромбоциты', 'type': 'float', 'unit': ['(10deg9/л)', '(10deg9 л)']},
             'mpv': {'name': 'Средний объем тромбоцитов', 'type': 'float', 'unit': ['(фл)']},
             'pct': {'name': 'Тромбокрит', 'type': 'float', 'unit': ['(%)']},
             'pdw': {'name': 'Распределение тромбоцитов по объему', 'type': 'float', 'unit': ['(фл)']},
@@ -144,24 +144,24 @@ TABLE_DICT = {
             'neu%': {'name': 'Нейтрофилы', 'type': 'float', 'unit': ['(%)']},
             'lym%': {'name': 'Лимфоциты', 'type': 'float', 'unit': ['(%)']},
             'mon%': {'name': 'Моноциты', 'type': 'float', 'unit': ['(%)']},
-            'neu#': {'name': 'Нейтрофилы', 'type': 'float', 'unit': ['(10deg9/л)']},
-            'lym#': {'name': 'Лимфоциты', 'type': 'float', 'unit': ['(10deg9/л)']},
-            'mon#': {'name': 'Моноциты', 'type': 'float', 'unit': ['(10deg9/л)']},
+            'neu#': {'name': 'Нейтрофилы', 'type': 'float', 'unit': ['(10deg9/л)', '(10deg9 л)']},
+            'lym#': {'name': 'Лимфоциты', 'type': 'float', 'unit': ['(10deg9/л)', '(10deg9 л)']},
+            'mon#': {'name': 'Моноциты', 'type': 'float', 'unit': ['(10deg9/л)', '(10deg9 л)']},
             'соэ': {'name': 'СОЭ', 'type': 'float', 'unit': ['(мм/ч)']},
             'палочкоядерные': {'name': 'Палочкоядерные нейтрофилы', 'type': 'float', 'unit': ['(%)']},
             'сегментоядерные': {'name': 'Сегментоядерные нейтрофилы', 'type': 'float', 'unit': ['(%)']},
             'лимфоциты': {'name': 'Лимфоциты', 'type': 'float', 'unit': ['(%)']},
             'моноциты': {'name': 'Моноциты', 'type': 'float', 'unit': ['(%)']},
             'eos%': {'name': 'Эозинофилы', 'type': 'float', 'unit': ['(%)']},
-            'eos#': {'name': 'Эозинофилы', 'type': 'float', 'unit': ['(10deg9/л)']},
+            'eos#': {'name': 'Эозинофилы', 'type': 'float', 'unit': ['(10deg9/л)', '(10deg9 л)']},
             'исследование уровня глюкозы': {'name': 'Уровень глюкозы', 'type': 'float', 'unit': ['']},
             'исследование уровня лактата': {'name': 'Уровень лактата', 'type': 'float', 'unit': ['']},
-            'bas#': {'name': 'Базофилы', 'type': 'float', 'unit': ['(10deg9/л)']},
+            'bas#': {'name': 'Базофилы', 'type': 'float', 'unit': ['(10deg9/л)', '(10deg9 л)']},
             'bas%': {'name': 'Базофилы', 'type': 'float', 'unit': ['(%)']}
         },
     'Анализ крови биохимический':
         {
-            'id': {'name': 'id', 'type': '', 'unit': []},
+            'patient_id': {'name': 'patient_id', 'type': '', 'unit': []},
             'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
             'алт': {'name': 'АЛТ', 'type': 'float', 'unit': ['(ед/л)']},
             'альбумин': {'name': 'Альбумин', 'type': 'float', 'unit': ['(г/л)']},
@@ -183,7 +183,7 @@ TABLE_DICT = {
         },
     'Биохимия Covid19':
         {
-            'id': {'name': 'id', 'type': '', 'unit': []},
+            'patient_id': {'name': 'patient_id', 'type': '', 'unit': []},
             'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
             'калий': {'name': 'Калий', 'type': 'float', 'unit': ['(ммоль/л)']},
             'определение активности щелочной фосфатазы': {'name': 'Активность фосфатазы',
@@ -194,6 +194,7 @@ TABLE_DICT = {
             'urea': {'name': 'Мочевина', 'type': 'float', 'unit': ['(ммоль/л)']},
             'cre': {'name': 'Креатинин', 'type': 'float', 'unit': ['(мкмоль/л)']},
             'tbil': {'name': 'Общий билирубин', 'type': 'float', 'unit': ['(мкмоль/л)']},
+            'железо': {'name': 'Железо', 'type': 'float', 'unit': ['(мкмоль/л)']},
             'аст': {'name': 'АСТ', 'type': 'float', 'unit': ['(ед/л)']},
             'алт': {'name': 'АЛТ', 'type': 'float', 'unit': ['(ед/л)']},
             'кфк': {'name': 'КФК', 'type': 'float', 'unit': ['(ед/л)']},
@@ -202,7 +203,7 @@ TABLE_DICT = {
     # TODO - Таблица не доделана
     'Общий (клинический) анализ мочи':
         {
-            'id': {'name': 'id', 'type': '', 'unit': []},
+            'patient_id': {'name': 'patient_id', 'type': '', 'unit': []},
             'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
             'цвет': {'name': 'Цвет', 'type': 'class', 'unit': {'светло-желтый': ['светло-желтый', 'с/желтый'],
                                                                'соломено-желтый': ['соломено-желтый']}},
@@ -221,7 +222,7 @@ TABLE_DICT = {
         },
     'Кислотно-основное равновесие':
         {
-            'id': {'name': 'id', 'type': '', 'unit': []},
+            'patient_id': {'name': 'patient_id', 'type': '', 'unit': []},
             'дата': {'name': 'Дата', 'type': 'date', 'unit': ['']},
             'к+': {'name': 'Калий', 'type': 'float', 'unit': ['(ммоль/л)']},
             'na+': {'name': 'Натрий', 'type': 'float', 'unit': ['(ммоль/л)']}

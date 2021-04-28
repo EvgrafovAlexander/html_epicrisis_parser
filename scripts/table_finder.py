@@ -53,7 +53,7 @@ def table_handler(text: str, table_info: dict) -> List[dict]:
     table_data = []
     name = table_info['name']
     if name in TABLE_DICT:
-        logging.info('Обработка таблицы: "%s"', name)
+        logging.info('\nОбработка таблицы: "%s"', name)
         table_text = text[table_info['start']:table_info['stop']]
         table_data = information_extractor(table_text, TABLE_DICT[name])
     else:
@@ -71,6 +71,8 @@ def information_extractor(text: str, table_dict: dict) -> List[dict]:
     data_dict = {key: None for key in table_dict.keys()}
 
     fragments = text.split('\n')
+    if len(fragments) <= 1:
+        logging.info('Не удалось разделение на фрагменты\n')
     columns = []
     fill_mode = False
     cur_ind, max_ind, data_dict_cur = 0, 0, {}
@@ -105,6 +107,7 @@ def information_extractor(text: str, table_dict: dict) -> List[dict]:
             else:
                 data_list.append(data_dict_cur)
                 fill_mode = False
+    logging.info('Ожидаемые параметры: %s \n', ', '.join(columns))
     if len(data_list):
         data_list = delete_empty_rec(data_list)
     return data_list
@@ -125,15 +128,15 @@ def value_handler(value: str, column: str, table_dict: dict):
     value_type = table_dict['type']
     value_unit = table_dict['unit']
     if value_type in ['float']:
-        value = value_parser_float(value, value_type, value_unit)
+        value = value_parser_float(value, value_type, value_unit, column)
     if value_type in ['class']:
-        value = value_parser_mixed(value, value_type, value_unit)
+        value = value_parser_mixed(value, value_type, value_unit, column)
     if value_type in ['not']:
         value = value
     return value
 
 
-def value_parser_float(value: str, value_type: str, value_unit: List[str]):
+def value_parser_float(value: str, value_type: str, value_unit: List[str], column: str):
     parsed_value = None
     re_dict = {'float': r'^\d+(?:[\.,]\d+)?'}
     value = prepare_value(value)
@@ -142,9 +145,10 @@ def value_parser_float(value: str, value_type: str, value_unit: List[str]):
         if len(matches):
             parsed_value = float(matches[0])
     elif value.rstrip() not in ['', '\xa0']:
-        logging.info("""Недостоверное значение: 
+        logging.info("""Недостоверное значение:
+                    Столбец: {} 
                     Значение: {}
-                    Ожидаемые единицы измерения: {}""".format(value, value_unit))
+                    Ожидаемые единицы измерения: {}""".format(column, value, value_unit))
     return parsed_value
 
 
@@ -153,7 +157,7 @@ def value_parser_class(value: str, value_type: str, classes: dict):
     return parsed_value
 
 
-def value_parser_mixed(value: str, value_type: str, classes: dict):
+def value_parser_mixed(value: str, value_type: str, classes: dict, column: str):
     value = prepare_value(value)
     matches = re.findall(r'^\d+(?:[\.,]\d+)?', value)
     if len(matches):
@@ -198,7 +202,7 @@ def prepare_data(data: list, patient_id: int):
 
     # 1. добавить patient_id
     for row in data:
-        row['id'] = patient_id
+        row['patient_id'] = patient_id
 
     # 2. объединить данные с одинаковыми датами
     result_data = []
