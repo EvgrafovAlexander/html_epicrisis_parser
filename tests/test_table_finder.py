@@ -31,28 +31,28 @@ class TestTableFinder(unittest.TestCase):
         value = '0.23(сек.)'
         value_type = 'float'
         units = ['(сек.)']
-        result = table_finder.value_parser(value, value_type, units)
+        result = table_finder.value_parser_float(value, value_type, units, 'column')
         self.assertEqual(0.23, result)
 
     def test_value_parser_2(self):
         value = '23(сек.)'
         value_type = 'float'
         units = ['(сек.)']
-        result = table_finder.value_parser(value, value_type, units)
+        result = table_finder.value_parser_float(value, value_type, units, 'column')
         self.assertEqual(23, result)
 
     def test_value_parser_3(self):
         value = '23  (сек.)'
         value_type = 'float'
         units = ['(сек.)']
-        result = table_finder.value_parser(value, value_type, units)
+        result = table_finder.value_parser_float(value, value_type, units, 'column')
         self.assertEqual(23, result)
 
     def test_value_parser_4(self):
         value = '20.23  '
         value_type = 'float'
         units = ['']
-        result = table_finder.value_parser(value, value_type, units)
+        result = table_finder.value_parser_float(value, value_type, units, 'column')
         self.assertEqual(20.23, result)
 
 
