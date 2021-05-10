@@ -32,6 +32,7 @@ def get_table_begin(text: str, table_names: list) -> int or None:
 
 def order_table_info(text: str, seg_tables: list) -> List[dict]:
     segmented_table_info = []
+    if not seg_tables: return segmented_table_info
     for i in range(len(seg_tables) - 1):
         info = {'name': seg_tables[i][1],
                 'start': seg_tables[i][0],
@@ -90,7 +91,8 @@ def information_extractor(text: str, table_dict: dict) -> List[dict]:
 
             date = re.search(r'\d\d.\d\d.\d\d\d\d', fragment)
             if date:
-                date = datetime.strptime(fragment[date.start():date.end()], '%d.%m.%Y')
+                date = fragment[date.start():date.end()].replace('/', '.')
+                date = datetime.strptime(date, '%d.%m.%Y')
                 data_dict_cur = data_dict.copy()
                 data_dict_cur['дата'] = date
                 cur_ind = 0

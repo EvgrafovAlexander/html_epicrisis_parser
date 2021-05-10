@@ -48,7 +48,8 @@ def prepare_dfs(data_dfs: dict) -> dict:
     main_df = main_df.apply(form_start_disease_date, axis=1)
 
     df_start_disease = main_df[['patient_id', 'start_disease_date']].copy()
-    df_start_disease['start_disease_date'] = pd.to_datetime(df_start_disease['start_disease_date'], format='%Y-%m-%d')
+    df_start_disease['start_disease_date'] = pd.to_datetime(df_start_disease['start_disease_date'], format='%Y-%m-%d',
+                                                            errors='coerce')
 
     table_names = set(data_dfs.keys()) - {'Основная информация', 'Перед госпитализацией',
                                           'После госпитализации', 'Во время госпитализации'}

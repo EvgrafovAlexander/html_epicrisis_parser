@@ -12,7 +12,7 @@ def get_date_between_sections(beg_sec: str, end_sec: str, text: str) -> datetime
         # 27.12.1985
         matches = re.findall(r'\d\d.\d\d.\d\d\d\d', text[beg_point.end():end_point.start()])
         if matches:
-            return (datetime.strptime(matches[0], '%d.%m.%Y').date(),
+            return (datetime.strptime(matches[0].replace('/', '.'), '%d.%m.%Y').date(),
                     text[get_end_point(text, matches[0]):])
         # 27.12.85
         matches = re.findall(r'\d\d.\d\d.\d\d', text[beg_point.end():end_point.start()])
@@ -23,12 +23,12 @@ def get_date_between_sections(beg_sec: str, end_sec: str, text: str) -> datetime
                 year = '19' + matches[0][-2:]
             else:
                 year = '20' + matches[0][-2:]
-            return (datetime.strptime(day_mon + year, '%d.%m.%Y').date(),
+            return (datetime.strptime((day_mon + year).replace('/', '.'), '%d.%m.%Y').date(),
                     text[get_end_point(text, matches[0]):])
         # 1985
         matches = re.findall(r'\d\d\d\d', text[beg_point.end():end_point.start()])
         if matches:
-            return (datetime.strptime('01.01.' + matches[0], '%d.%m.%Y').date(),
+            return (datetime.strptime(('01.01.' + matches[0]).replace('/', '.'), '%d.%m.%Y').date(),
                     text[get_end_point(text, matches[0]):])
         # 85
         matches = re.findall(r'\d\d', text[beg_point.end():end_point.start()])
@@ -38,7 +38,7 @@ def get_date_between_sections(beg_sec: str, end_sec: str, text: str) -> datetime
                 year = '19' + matches[0]
             else:
                 year = '20' + matches[0]
-            return datetime.strptime('01.01.' + year, '%d.%m.%Y').date()
+            return datetime.strptime(('01.01.' + year).replace('/', '.'), '%d.%m.%Y').date()
     return None
 
 
@@ -54,7 +54,7 @@ def get_date_in_fragment(text: str) -> datetime or None:
     # 27.12.1985
     matches = re.findall(r'\d+.\d\d.\d\d\d\d', text)
     if matches:
-        return datetime.strptime(matches[0], '%d.%m.%Y').date()
+        return datetime.strptime(matches[0].replace('/', '.'), '%d.%m.%Y').date()
     # 27.12.85
     matches = re.findall(r'\d\d.\d\d.\d\d', text)
     if matches:
