@@ -213,3 +213,13 @@ def get_treatment(text, patient_id) -> tuple:
         logging.info('Не найден фрагмент: Лечение во время госпитализации')
     text = text[get_end_few_point(text, END_TREA):]
     return drugs_during, text
+
+
+# ---------- Рекомендации ----------
+def get_treatment_after(treat_text, patient_id) -> tuple:
+    drugs_after = {}
+    if treat_text:
+        drugs_after = get_drugs(treat_text, TABLE_DICT['После госпитализации'])
+    else:
+        logging.info('Не найден фрагмент: Лечение после госпитализации')
+    return drugs_after, treat_text

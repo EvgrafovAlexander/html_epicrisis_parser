@@ -1,6 +1,8 @@
+import logging
 from scripts.table_constants import TABLE_DICT
 from .date_finder import get_date_between_few_sections
-from .segment_finder import get_sex, get_diagnosis, get_complaints, get_anamnesis, get_test_results, get_treatment
+from .segment_finder import get_sex, get_diagnosis, get_complaints, get_anamnesis, get_test_results,\
+    get_treatment, get_treatment_after
 from .constants import F_DATES
 
 
@@ -39,14 +41,23 @@ def text_parser(text: str, patient_id: int) -> dict:
     base_patient_data.update(anam_dict)
 
     test_dict, text = get_test_results(text, patient_id)
+    len_after_test = len(text)
 
     treat_during_dict, text = get_treatment(text, patient_id)
     treat_during_dict['patient_id'] = patient_id
 
+    treat_after_dict = {}
+    if len(text) < len_after_test:
+        treat_after_dict, text = get_treatment_after(text, patient_id)
+        treat_after_dict['patient_id'] = patient_id
+    else:
+        logging.info('Не найден фрагмент: Лечение после госпитализации')
+
     # объединяем текстовые и табличные данные
     patient_data = {'Основная информация': [base_patient_data],
                     'Перед госпитализацией': [drugs_before_dict],
-                    'Во время госпитализации': [treat_during_dict]}
+                    'Во время госпитализации': [treat_during_dict],
+                    'После госпитализации': [treat_after_dict]}
     patient_data.update(test_dict)
 
     return patient_data
